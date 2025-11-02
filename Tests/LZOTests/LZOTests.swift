@@ -35,6 +35,27 @@ struct LZOTests {
         }
     }
 
+    @Test("Decompressed fixture payloads match reference strings")
+    func fixtureDecompressMatchesPlaintext() throws {
+        let fixtures: [(name: String, plain: String)] = [
+            ("test_a", "fixture-a-output"),
+            ("test_b", "fixture-b-output-with-newline\n"),
+            ("test_c", "fixture-c-contains-binary-data")
+        ]
+
+        for fixture in fixtures {
+            let fileBytes = try fixtureBytes(named: fixture.name)
+            let decompressed = try LZO.decompress1X(fileBytes)
+            let expected = Array(fixture.plain.utf8)
+            guard decompressed == expected else {
+                print("Fixture \(fixture.name) decompressed bytes:", decompressed)
+                print("Fixture \(fixture.name) expected bytes:", expected)
+                #expect(decompressed == expected, "Decompressed payload for \(fixture.name) does not match expected bytes")
+                return
+            }
+        }
+    }
+
     @Test("Roundtrip with short literal payload")
     func roundTripShort() throws {
         let payload = Array("hello lzo!".utf8)
