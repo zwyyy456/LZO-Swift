@@ -7,7 +7,8 @@ struct LZOTests {
     @Test("Fixture bytes match compressor output for test_a and test_b")
     func fixtureBytesMatchShortStrings() throws {
         let fixtures: [(name: String, plain: String)] = [
-            ("test_a", "fixture-a-output")
+            ("test_a", "fixture-a-output"),
+            ("test_b", "fixture-b-output-with-newline\n")
         ]
 
         for fixture in fixtures {
